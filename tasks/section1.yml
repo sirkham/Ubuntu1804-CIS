@@ -1145,5 +1145,5 @@
       - level1
       - notscored
       - patch
-      - rule_1.8
+      - rule_1.9
       - skip_ansible_lint
