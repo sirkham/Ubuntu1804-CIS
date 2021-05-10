@@ -348,65 +348,65 @@
       - patch
       - rule_3.3.5
 
-- name: "SCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install dccp(\\s|$)"
-      line: "install dccp /bin/true"
-      create: true
-  when:
-      - ubuntu1804cis_rule_3_4_1
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_3.4.1
+#- name: "SCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
+#  lineinfile:
+#      dest: /etc/modprobe.d/CIS.conf
+#      regexp: "^(#)?install dccp(\\s|$)"
+#      line: "install dccp /bin/true"
+#      create: true
+#  when:
+#      - ubuntu1804cis_rule_3_4_1
+#  tags:
+#      - level2
+#      - scored
+#      - patch
+#      - rule_3.4.1
 
-- name: "SCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install sctp(\\s|$)"
-      line: "install sctp /bin/true"
-      create: true
-  when:
-      - ubuntu1804cis_rule_3_4_2
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_3.4.2
+#- name: "SCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
+#  lineinfile:
+#      dest: /etc/modprobe.d/CIS.conf
+#      regexp: "^(#)?install sctp(\\s|$)"
+#      line: "install sctp /bin/true"
+#      create: true
+#  when:
+#      - ubuntu1804cis_rule_3_4_2
+#  tags:
+#      - level2
+#      - scored
+#      - patch
+#      - rule_3.4.2
 
-- name: "SCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install rds(\\s|$)"
-      line: "install rds /bin/true"
-      create: true
-  when:
-      - ubuntu1804cis_rule_3_4_3
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_3.4.3
+#- name: "SCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
+#  lineinfile:
+#      dest: /etc/modprobe.d/CIS.conf
+#      regexp: "^(#)?install rds(\\s|$)"
+#      line: "install rds /bin/true"
+#      create: true
+#  when:
+#      - ubuntu1804cis_rule_3_4_3
+#  tags:
+#      - level2
+#      - scored
+#      - patch
+#      - rule_3.4.3
 
-- name: "SCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install tipc(\\s|$)"
-      line: "install tipc /bin/true"
-      create: true
-  when:
-      - ubuntu1804cis_rule_3_4_4
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_3.4.4
+#- name: "SCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
+#  lineinfile:
+#      dest: /etc/modprobe.d/CIS.conf
+#      regexp: "^(#)?install tipc(\\s|$)"
+#      line: "install tipc /bin/true"
+#      create: true
+#  when:
+#      - ubuntu1804cis_rule_3_4_4
+#  tags:
+#      - level2
+#      - scored
+#      - patch
+#      - rule_3.4.4
 
-- name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld(CUSTOM),ufw,nftables,iptables"
+- name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld(CUSTOM),ufw,nftables,iptables"
   block:
-      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld | CUSTOM"
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld | CUSTOM"
         apt:
             name: iptables
             state: present
@@ -414,7 +414,7 @@
         when:
             - ubuntu1804cis_firewall == "firewalld"
 
-      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | ufw"
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | ufw"
         apt:
             name: ufw
             state: present
@@ -422,7 +422,7 @@
         when:
             - ubuntu1804cis_firewall == "ufw"
 
-      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | nftables"
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | nftables"
         apt:
             name: nftables
             state: present
@@ -430,7 +430,7 @@
         when:
             - ubuntu1804cis_firewall == "nftables"
 
-      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | iptables"
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | iptables"
         apt:
             name: iptables
             state: present
@@ -951,97 +951,98 @@
       - patch
       - rule_3.5.4.2.4
 
-- name: "SCORED | 3.5.4.3.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
-  apt:
-      name: firewalld
-      state: present
-      install_recommends: false
-  when:
-      - ubuntu1804cis_rule_3_5_4_3_1
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.4.3.1
+#- name: "SCORED | 3.5.4.3.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+#  apt:
+#      name: firewalld
+#      state: present
+#      install_recommends: false
+#  when:
+#      - ubuntu1804cis_rule_3_5_4_3_1
+#      - ubuntu1804cis_firewall == "firewalld"
+#      - ubuntu1804cis_setup_firewall
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_3.5.4.3.1
 
-- name: "SCORED | 3.5.4.3.2 | PATCH | Ensure firewalld is installed and started | CUSTOM"
-  service:
-      name: firewalld
-      state: started
-      enabled: true
-  when:
-      - ubuntu1804cis_rule_3_5_4_3_2
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.4.3.2
+#- name: "SCORED | 3.5.4.3.2 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+#  service:
+#      name: firewalld
+#      state: started
+#      enabled: true
+#  when:
+#      - ubuntu1804cis_rule_3_5_4_3_2
+#      - ubuntu1804cis_firewall == "firewalld"
+#      - ubuntu1804cis_setup_firewall
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_3.5.4.3.2
 
-- name: "SCORED | 3.5.4.3.3 | PATCH | Ensure default deny firewall policy | CUSTOM"
-  lineinfile:
-      dest: /etc/firewalld/firewalld.conf
-      regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
-  when:
-      - ubuntu1804cis_rule_3_5_4_3_3
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.4.3.3
+#- name: "SCORED | 3.5.4.3.3 | PATCH | Ensure default deny firewall policy | CUSTOM"
+#  lineinfile:
+#      dest: /etc/firewalld/firewalld.conf
+#      regexp: "^DefaultZone"
+#      line: "DefaultZone=drop"
+#  when:
+#      - ubuntu1804cis_rule_3_5_4_3_3
+#      - ubuntu1804cis_firewall == "firewalld"
+#      - ubuntu1804cis_setup_firewall
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_3.5.4.3.3
 
-- name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
-  firewalld:
-      state: enabled
-      zone: drop
-      permanent: true
-  when:
-      - ubuntu1804cis_rule_3_5_4_3_4
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.4.3.4
+#- name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
+#  firewalld:
+#      state: enabled
+#      zone: drop
+#      permanent: true
+#  when:
+#      - ubuntu1804cis_rule_3_5_4_3_4
+#      - ubuntu1804cis_firewall == "firewalld"
+#      - ubuntu1804cis_setup_firewall
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_3.5.4.3.4
 
-- name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
-  firewalld:
-      service: "{{ item }}"
-      state: enabled
-      zone: drop
-      permanent: true
-      immediate: true
-  when:
-      - ubuntu1804cis_rule_3_5_4_3_5
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  notify: restart firewalld
-  with_items: "{{ ubuntu1804cis_firewall_services }}"
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.5.4.3.5
+#- name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
+#  firewalld:
+#      service: "{{ item }}"
+#      state: enabled
+#      zone: drop
+#      permanent: true
+#      immediate: true
+#  when:
+#      - ubuntu1804cis_rule_3_5_4_3_5
+#      - ubuntu1804cis_firewall == "firewalld"
+#      - ubuntu1804cis_setup_firewall
+#  notify: restart firewalld
+#  with_items: "{{ ubuntu1804cis_firewall_services }}"
+#  tags:
+#      - level1
+#      - scored
+#      - patch
+#      - rule_3.5.4.3.5
 
-- name: "NOTSCORED | 3.7 | Disable IPv6"
-  replace:
-      dest: /etc/default/grub
-      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
-      replace: '\1 ipv6.disable=1\2'
-  ignore_errors: true
-  when:
-      - ubuntu1804cis_rule_3_7
-  notify:
-      - generate new grub config
-  tags:
-      - level2
-      - notscored
-      - patch
-      - rule_3.7
+#- name: "NOTSCORED | 3.7 | Disable IPv6"
+#  replace:
+#      dest: /etc/default/grub
+#      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
+#      replace: '\1 ipv6.disable=1\2'
+#  ignore_errors: true
+#  when:
+#      - ubuntu1804cis_rule_3_7
+#  notify:
+#      - generate new grub config
+#  tags:
+#      - level2
+#      - notscored
+#      - patch
+#      - rule_3.7
+#
