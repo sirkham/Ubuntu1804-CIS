@@ -1,841 +1,466 @@
 ---
-- name: "SCORED | 5.1.1 | PATCH | Ensure cron daemon is enabled"
-  service:
-      name: "{{ cron_service[ansible_os_family] }}"
-      enabled: true
-  when:
-      - ubuntu1804cis_rule_5_1_1
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.1
-
-- name: "SCORED | 5.1.2 | PATCH | Ensure permissions on /etc/crontab are configured"
-  file:
-      dest: /etc/crontab
-      owner: root
-      group: root
-      mode: 0600
-  when:
-      - ubuntu1804cis_rule_5_1_2
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.2
-
-- name: "SCORED | 5.1.3 | PATCH | Ensure permissions on /etc/cron.hourly are configured"
-  file:
-      dest: /etc/cron.hourly
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
-  when:
-      - ubuntu1804cis_rule_5_1_3
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.3
-
-- name: "SCORED | 5.1.4 | PATCH | Ensure permissions on /etc/cron.daily are configured"
-  file:
-      dest: /etc/cron.daily
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
-  when:
-      - ubuntu1804cis_rule_5_1_4
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.4
-
-- name: "SCORED | 5.1.5 | PATCH | Ensure permissions on /etc/cron.weekly are configured"
-  file:
-      dest: /etc/cron.weekly
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
-  when:
-      - ubuntu1804cis_rule_5_1_5
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.5
-
-- name: "SCORED | 5.1.6 | PATCH | Ensure permissions on /etc/cron.monthly are configured"
-  file:
-      dest: /etc/cron.monthly
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
-  when:
-      - ubuntu1804cis_rule_5_1_6
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.6
-
-- name: "SCORED | 5.1.7 | PATCH | Ensure permissions on /etc/cron.d are configured"
-  file:
-      dest: /etc/cron.d
-      state: directory
-      owner: root
-      group: root
-      mode: 0700
-  when:
-      - ubuntu1804cis_rule_5_1_7
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.7
-
-- name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-  block:
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at is restricted to authorized users"
-        file:
-            dest: /etc/at.deny
-            state: absent
-
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at is restricted to authorized users"
-        template:
-            src: at.allow.j2
-            dest: /etc/at.allow
-            owner: root
-            group: root
-            mode: 0600
-
-      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
-        file:
-            dest: /etc/cron.deny
-            state: absent
-
-      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
-        template:
-          src: cron.allow.j2
-          dest: /etc/cron.allow
-          owner: root
-          group: root
-          mode: 0600
-  when:
-      - ubuntu1804cis_rule_5_1_8
-  tags:
-      - level1
-      - scored
-      - patch
-      - cron
-      - rule_5.1.8
-
-- name: "SCORED | 5.2.1 | PATCH | Ensure permissions on /etc/ssh/sshd_config are configured"
-  file:
-      dest: /etc/ssh/sshd_config
-      state: file
-      owner: root
-      group: root
-      mode: 0600
-  when:
-      - ubuntu1804cis_rule_5_2_1
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.1
-
-- name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured"
-  block:
-      - name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured | find keys"
-        find:
-            paths: /etc/ssh
-            patterns: "ssh_host_*_key"
-        register: ssh_private_host_keys
-
-      - name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured | change permissions"
-        file:
-            dest: "{{ item.path }}"
-            state: file
-            owner: root
-            group: root
-            mode: 0600
-        with_items: "{{ ssh_private_host_keys.files }}"
-  when:
-      - ubuntu1804cis_rule_5_2_2
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.2
-
-- name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured"
-  block:
-      - name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured | find keys"
-        find:
-            paths: /etc/ssh
-            patterns: "ssh_host_*_key.pub"
-        register: ssh_public_host_keys
-
-      - name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured | change permissions"
-        file:
-            dest: "{{ item.path }}"
-            state: file
-            owner: root
-            group: root
-            mode: 0644
-        with_items: "{{ ssh_public_host_keys.files }}"
-  when:
-      - ubuntu1804cis_rule_5_2_3
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.3
-
-- name: "SCORED | 5.2.4 | PATCH | Ensure SSH Protocol is not set to 1"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Protocol'
-      line: 'Protocol 2'
-  when:
-      - ubuntu1804cis_rule_5_2_4
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.4
-
-- name: "SCORED | 5.2.5 | PATCH | Ensure SSH LogLevel is set to INFO"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^LogLevel'
-      line: 'LogLevel INFO'
-  when:
-      - ubuntu1804cis_rule_5_2_5
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.5
-
-- name: "SCORED | 5.2.6 | PATCH | Ensure SSH X11 forwarding is disabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^X11Forwarding'
-      line: 'X11Forwarding no'
-  when:
-      - ubuntu1804cis_rule_5_2_6
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.6
-
-- name: "SCORED | 5.2.7 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^(#)?MaxAuthTries \d'
-      line: 'MaxAuthTries 4'
-  when:
-      - ubuntu1804cis_rule_5_2_7
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.7
-
-- name: "SCORED | 5.2.8 | PATCH | Ensure SSH IgnoreRhosts is enabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^IgnoreRhosts'
-      line: 'IgnoreRhosts yes'
-  when:
-      - ubuntu1804cis_rule_5_2_8
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.8
-
-- name: "SCORED | 5.2.9 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^HostbasedAuthentication'
-      line: 'HostbasedAuthentication no'
-  when:
-      - ubuntu1804cis_rule_5_2_9
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.9
-
-- name: "SCORED | 5.2.10 | PATCH | Ensure SSH root login is disabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitRootLogin'
-      line: 'PermitRootLogin no'
-  when:
-      - ubuntu1804cis_rule_5_2_10
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.10
-
-- name: "SCORED | 5.2.11 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitEmptyPasswords'
-      line: 'PermitEmptyPasswords no'
-  when:
-      - ubuntu1804cis_rule_5_2_11
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.11
-
-- name: "SCORED | 5.2.12 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^PermitUserEnvironment'
-      line: 'PermitUserEnvironment no'
-  when:
-      - ubuntu1804cis_rule_5_2_12
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.12
-
-- name: "SCORED | 5.2.13 | PATCH | Ensure only strong Ciphers are used"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Ciphers'
-      line: "Ciphers {{ ubuntu1804cis_sshd['ciphers'] }}"
-  when:
-      - ubuntu1804cis_rule_5_2_13
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.13
-
-- name: "SCORED | 5.2.14 | PATCH | Ensure only approved MAC algorithms are used"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^MACs'
-      line: "MACs {{ ubuntu1804cis_sshd['macs'] }}"
-  when:
-      - ubuntu1804cis_rule_5_2_14
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.14
-
-- name: "SCORED | 5.2.15 | PATCH | Ensure only strong Key Exchange algorithms are used"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^KexAlgorithms'
-      line: "KexAlgorithms {{ ubuntu1804cis_sshd['kexalgorithms'] }}"
-  when:
-      - ubuntu1804cis_rule_5_2_15
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.15
-
-- name: "SCORED | 5.2.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
-  block:
-      - name: "SCORED | 5.2.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveInterval'
-            line: "ClientAliveInterval {{ ubuntu1804cis_sshd['clientaliveinterval'] }}"
-
-      - name: "SCORED | 5.2.16 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveCountMax'
-            line: "ClientAliveCountMax {{ ubuntu1804cis_sshd['clientalivecountmax'] }}"
-  when:
-      - ubuntu1804cis_rule_5_2_16
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.16
-
-- name: "SCORED | 5.2.17 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^LoginGraceTime'
-      line: "LoginGraceTime 60"
-  when:
-      - ubuntu1804cis_rule_5_2_17
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.17
-
-- name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited"
-  block:
-      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | allowusers"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^AllowUsers'
-            line: "AllowUsers {{ ubuntu1804cis_sshd['allowusers'] }}"
-        when:
-            - "ubuntu1804cis_sshd['allowusers']|default('')"
-
-      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | allowgroups"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^AllowGroups'
-            line: "AllowGroups {{ ubuntu1804cis_sshd['allowgroups'] }}"
-        when:
-            - "ubuntu1804cis_sshd['allowgroups']|default('')"
-
-      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | denyusers"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^DenyUsers'
-            line: "DenyUsers {{ ubuntu1804cis_sshd['denyusers'] }}"
-        when:
-            - "ubuntu1804cis_sshd['denyusers']|default('')"
-
-      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | denygroups"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^DenyGroups'
-            line: "DenyGroups {{ ubuntu1804cis_sshd['denygroups'] }}"
-        when:
-            - "ubuntu1804cis_sshd['denygroups']|default('')"
-  when:
-      - ubuntu1804cis_rule_5_2_18
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.18
-
-- name: "SCORED | 5.2.19 | PATCH | Ensure SSH warning banner is configured"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Banner'
-      line: 'Banner /etc/issue.net'
-  when:
-      - ubuntu1804cis_rule_5_2_19
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.19
-
-- name: "SCORED | 5.2.20 | PATCH | Ensure SSH PAM is enabled"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^UsePAM'
-      line: 'UsePAM yes'
-  when:
-      - ubuntu1804cis_rule_5_2_20
-  tags:
-      - level1
-      - scored
-      - patch
-      - sshd
-      - rule_5.2.20
-
-#- name: "SCORED | 5.2.21 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
-#  lineinfile:
-#      state: present
-#      dest: /etc/ssh/sshd_config
-#      regexp: '^AllowTcpForwarding'
-#      line: 'AllowTcpForwarding no'
+#- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+#  command: /bin/true
+#  changed_when: false
 #  when:
-#      - ubuntu1804cis_rule_5_2_21
+#      - ubuntu1804cis_rule_6_1_1
 #  tags:
 #      - level2
-#      - scored
+#      - notscored
 #      - patch
-#      - sshd
-#      - rule_5.2.21
+#      - rule_6.1.1
+#      - notimplemented
 
-- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxStartups is configured"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^MaxStartups'
-      line: 'MaxStartups 10:30:60'
+- name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
+  file:
+      dest: /etc/passwd
+      owner: root
+      group: root
+      mode: 0644
   when:
-      - ubuntu1804cis_rule_5_2_22
+      - ubuntu1804cis_rule_6_1_2
   tags:
       - level1
       - scored
       - patch
-      - sshd
-      - rule_5.2.22
+      - rule_6.1.2
 
-- name: "SCORED | 5.2.23 | PATCH | Ensure SSH MaxSessions is set to 4 or less "
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^MaxSessions'
-      line: 'MaxSessions 4'
-  notify:
-      - restart sshd
+- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+  file:
+      dest: /etc/gshadow-
+      owner: root
+      group: shadow
+      mode: 0640
   when:
-      - ubuntu1804cis_rule_5_2_23
+      - ubuntu1804cis_rule_6_1_3
   tags:
       - level1
       - scored
       - patch
-      - sshd
-      - rule_5.2.23
+      - rule_6.1.3
 
-- name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
-  block:
-      - name: "SCORED | 5.3.1 | PATCH | Ensure lipam-pwquality is installed"
-        apt:
-            name: libpam-pwquality
-            state: present
-            install_recommends: false
 
-      - name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
-        lineinfile:
-            state: present
-            create: yes
-            dest: /etc/security/pwquality.conf
-            regexp: '^{{ item.key }}'
-            line: '{{ item.key }} = {{ item.value }}'
-        with_items:
-            - "{{ ubuntu1804cis_pwquality }}"
+- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/shadow are configured"
+  file:
+      dest: /etc/shadow
+      owner: root
+      group: shadow
+      mode: 0640
   when:
-      - ubuntu1804cis_rule_5_3_1
+      - ubuntu1804cis_rule_6_1_4
   tags:
       - level1
       - scored
       - patch
-      - rule_5.3.1
+      - rule_6.1.4
 
-- name: "SCORED | 5.3.2 | PATCH | Ensure lockout for failed password attempts is configured"
-  block:
-      - name: "SCORED | 5.3.2 | PATCH |  Ensure lockout for failed password attempts is configured - /etc/pam.d/common-account"
-        lineinfile:
-            dest: /etc/pam.d/common-account
-            line: 'account required pam_tally2.so'
-
-      - name: "SCORED | 5.3.2 | PATCH |  Ensure lockout for failed password attempts is configured - /etc/pam.d/common-auth"
-        lineinfile:
-            dest: /etc/pam.d/common-auth
-            line: 'auth required pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900'
+- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/group are configured"
+  file:
+      dest: /etc/group
+      owner: root
+      group: root
+      mode: 0644
   when:
-      - ubuntu1804cis_rule_5_3_2
+      - ubuntu1804cis_rule_6_1_5
   tags:
       - level1
       - scored
       - patch
-      - rule_5.3.2
+      - rule_6.1.5
 
-- name: "SCORED | 5.3.3 | PATCH | Ensure password reuse is limited"
-  lineinfile:
-      dest: /etc/pam.d/common-password
-      line: "password required pam_pwhistory.so remember={{ ubuntu1804cis_pass['history'] }}"
+- name: "SCORED | 6.1.6 | PATCH | Ensure permissions on /etc/passwd- are configured"
+  file:
+      dest: /etc/passwd-
+      owner: root
+      group: root
+      mode: 0600
   when:
-      - ubuntu1804cis_rule_5_3_3
+      - ubuntu1804cis_rule_6_1_6
   tags:
       - level1
       - scored
       - patch
-      - rule_5.3.3
+      - rule_6.1.6
 
-- name: "SCORED | 5.3.4 | PATCH | Ensure password hashing algorithm is SHA-512"
-  command: authconfig --passalgo=sha512 --update
-  changed_when: false
-  failed_when: false
+- name: "SCORED | 6.1.7 | PATCH | Ensure permissions on /etc/shadow- are configured"
+  file:
+      dest: /etc/shadow-
+      owner: root
+      group: shadow
+      mode: 0600
   when:
-      - ubuntu1804cis_rule_5_3_4
+      - ubuntu1804cis_rule_6_1_7
   tags:
       - level1
       - scored
       - patch
-      - rule_5.3.4
+      - rule_6.1.7
 
-- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 365 days or less"
-  lineinfile:
-      state: present
-      dest: /etc/login.defs
-      regexp: '^PASS_MAX_DAYS'
-      line: "PASS_MAX_DAYS {{ ubuntu1804cis_pass['max_days'] }}"
+- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+  file:
+      dest: /etc/group-
+      owner: root
+      group: root
+      mode: 0644
   when:
-      - ubuntu1804cis_rule_5_4_1_1
+      - ubuntu1804cis_rule_6_1_8
   tags:
       - level1
       - scored
       - patch
-      - rule_5.4.1.1
+      - rule_6.1.8
 
-- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is configured"
-  lineinfile:
-      state: present
-      dest: /etc/login.defs
-      regexp: '^PASS_MIN_DAYS'
-      line: "PASS_MIN_DAYS {{ ubuntu1804cis_pass['min_days'] }}"
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow are configured"
+  file:
+      dest: /etc/gshadow
+      owner: root
+      group: shadow
+      mode: 0640
   when:
-      - ubuntu1804cis_rule_5_4_1_2
+      - ubuntu1804cis_rule_6_1_9
   tags:
       - level1
       - scored
       - patch
-      - rule_5.4.1.2
+      - rule_6.1.9
 
-- name: "SCORED | 5.4.1.3 | PATCH | Ensure password expiration warning days is 7 or more"
-  lineinfile:
-      state: present
-      dest: /etc/login.defs
-      regexp: '^PASS_WARN_AGE'
-      line: "PASS_WARN_AGE {{ ubuntu1804cis_pass['warn_age'] }}"
-  when:
-      - ubuntu1804cis_rule_5_4_1_3
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_5.4.1.3
-
-- name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
-  lineinfile:
-    state: present
-    dest: /etc/default/useradd
-    regexp: '^INACTIVE'
-    line: "INACTIVE={{ ubuntu1804cis_pass['inactive'] }}"
-  when:
-      - ubuntu1804cis_rule_5_4_1_4
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_5.4.1.4
-
-- name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past"
-  block:
-      - name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past| lock users"
-        user:
-            name: "{{ item }}"
-            password_lock: yes"
-        loop: "{{ users_password_change_date_in_future.stdout_lines }}"
-        when:
-            - ubuntu1804cis_password_change_date_in_future_action == 'lock'
-
-      - name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past| expire users"
-        user:
-            name: "{{ item }}"
-            expires: 1422403387
-        loop: "{{ users_password_change_date_in_future.stdout_lines }}"
-        when:
-            - ubuntu1804cis_password_change_date_in_future_action == 'expire'
-  when:
-      - ubuntu1804cis_rule_5_4_1_5
-      - users_password_change_date_in_future.stdout_lines | length > 0
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_5.4.1.5
-
-- name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are secured"
-  command: >
-    for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
-     if [ $user != "root" ]; then
-      usermod -L $user
-      if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ];
-      then
-        usermod -s /usr/sbin/nologin $user
-      fi
-     fi
-    done
-  changed_when: false
-  when:
-      - ubuntu1804cis_rule_5_4_2
-      - system_accounts_non_login_1.stdout
-      - system_accounts_non_login_2.stdout
-  tags:
-      - level1
-      - patch
-      - rule_5.4.2
-      - scored
-
-- name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"
-  command: usermod -g 0 root
-  changed_when: false
-  failed_when: false
-  when:
-      - ubuntu1804cis_rule_5_4_3
-  tags:
-      - level1
-      - patch
-      - rule_5.4.3
-      - scored
-
-- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
-  block:
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/bash.bashrc"
-      lineinfile:
-        state: present
-        dest: /etc/bash.bashrc
-        create: true
-        regexp: '^umask '
-        line: 'umask 027'
-
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile"
-      lineinfile:
-        state: present
-        dest: /etc/profile
-        create: true
-        regexp: '^umask '
-        line: 'umask 027'
-
-    - name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive - /etc/profile.d/99-umask.sh"
-      lineinfile:
-        state: present
-        dest: /etc/profile.d/99-umask.sh
-        create: true
-        regexp: '^umask '
-        line: 'umask 027'
-  when:
-      - ubuntu1804cis_rule_5_4_4
-  tags:
-      - level1
-      - patch
-      - rule_5.4.4
-      - scored
-
-- name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less"
-  block:
-    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/bash.bashrc"
-      lineinfile:
-        state: present
-        dest: /etc/bash.bashrc
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
-
-    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
-      lineinfile:
-        state: present
-        dest: /etc/profile
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
-
-    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
-      lineinfile:
-        state: present
-        dest: /etc/profile.d/99-tmout.sh
-        create: true
-        regexp: '^TMOUT='
-        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
-  when:
-    - ubuntu1804cis_rule_5_4_5
-  tags:
-    - level1
-    - patch
-    - rule_5.4.5
-    - scored
-
-- name: "NOTSCORED | 5.5 | PATCH | Ensure root login is restricted to system console"
+- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_5
+      - ubuntu1804cis_rule_6_1_10
   tags:
       - level1
+      - scored
       - patch
-      - rule_5.5
-      - notscored
+      - rule_6.1.10
       - notimplemented
 
-- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
-  lineinfile:
-      state: present
-      dest: /etc/pam.d/su
-      regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
-      line: "auth           required        pam_wheel.so use_uid"
+- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+  command: /bin/true
+  changed_when: false
   when:
-      - ubuntu1804cis_rule_5_6
+      - ubuntu1804cis_rule_6_1_11
   tags:
       - level1
-      - patch
-      - rule_5.6
       - scored
+      - patch
+      - rule_6.1.11
+      - notimplemented
 
-#- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted - sudo group contains root"
-#  user:
-#      name: root
-#      groups: sudo
-#  when:
-#      - ubuntu1804cis_rule_5_6
-#  tags:
-#      - level1
-#      - patch
-#      - rule_5.6
-#      - scored
+- name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_1_12
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.1.12
+      - notimplemented
+
+- name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_1_13
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_6.1.13
+      - notimplemented
+
+- name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_1_14
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_6.1.14
+      - notimplemented
+
+- name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
+  command: passwd -l {{ item }}
+  changed_when: false
+  failed_when: false
+  with_items: "{{ empty_password_accounts.stdout_lines }}"
+  when:
+      - empty_password_accounts.rc
+      - ubuntu1804cis_rule_6_2_1
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.1
+
+- name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
+  lineinfile:
+      regexp: '^\+'
+      state: absent
+      path: /etc/passwd
+  when:
+      - ubuntu1804cis_rule_6_2_2
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.2
+
+- name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
+  lineinfile:
+      regexp: '^\+'
+      state: absent
+      path: /etc/shadow
+  when:
+      - ubuntu1804cis_rule_6_2_3
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.3
+
+- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
+  lineinfile:
+      regexp: '^\+'
+      state: absent
+      path: /etc/group
+  when:
+      - ubuntu1804cis_rule_6_2_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.4
+
+- name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
+  command: passwd -l {{ item }}
+  changed_when: false
+  failed_when: false
+  with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
+  when:
+      - uid_zero_accounts_except_root.rc
+      - ubuntu1804cis_rule_6_2_5
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.5
+
+- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
+  block:
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (unimplemented)"
+        command: /bin/true
+        changed_when: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+            - notimplemented
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (collect paths)"
+        shell: |
+          set -o pipefail;
+          sudopath=($(grep secure_path /etc/sudoers | cut -f2 -d= |cut -f2 -d\"))
+          IFS=:
+          for i in ${sudopath[*]}
+          do
+            if [ -d "$i" ]
+              then newsudopath+=($i)
+            fi
+           done
+          echo "${newsudopath[*]}"
+        args:
+            executable: /bin/bash
+        register: fixsudo
+        changed_when: false
+        check_mode: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (fix paths)"
+        lineinfile:
+            dest: /etc/sudoers
+            regexp: "(.*secure_path=).*"
+            line: '\1"{{ fixsudo.stdout_lines[0] }}"'
+            backrefs: true
+        when:
+            - fixsudo.stdout_lines[0]
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+  when:
+      - ubuntu1804cis_rule_6_2_6
+
+- name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_7
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.7
+      - notimplemented
+
+- name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+  shell: |
+      for dir in {{ homes_with_perms.stdout }};
+      do
+        chmod g-w,o-rwx $dir;
+      done
+  when:
+      - ubuntu1804cis_rule_6_2_8
+      - homes_with_perms.stdout | length > 0
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.8
+
+- name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_9
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.9
+      - notimplemented
+
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_10
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.10
+      - notimplemented
+
+- name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.forward"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - ubuntu1804cis_rule_6_2_11
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.11
+
+- name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.netrc"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - ubuntu1804cis_rule_6_2_12
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.12
+
+- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.rhosts"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - ubuntu1804cis_rule_6_2_14
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.14
+
+- name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_15
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.15
+      - notimplemented
+
+- name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_16
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.16
+      - notimplemented
+
+- name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_17
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.17
+      - notimplemented
+
+- name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_18
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.18
+      - notimplemented
+
+- name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_19
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.19
+      - notimplemented
+
+- name: "SCORED | 6.2.20 | PATCH | Ensure shadow group is empty"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_20
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.20
+      - notimplemented
 
