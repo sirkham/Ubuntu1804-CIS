@@ -1,15 +1,15 @@
 ---
-- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_rule_6_1_1
-  tags:
-      - level2
-      - notscored
-      - patch
-      - rule_6.1.1
-      - notimplemented
+#- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+#  command: /bin/true
+#  changed_when: false
+#  when:
+#      - ubuntu1804cis_rule_6_1_1
+#  tags:
+#      - level2
+#      - notscored
+#      - patch
+#      - rule_6.1.1
+#      - notimplemented
 
 - name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
   file:
