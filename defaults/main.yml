@@ -233,7 +233,7 @@ ubuntu1804cis_rule_5_2_17: true
 ubuntu1804cis_rule_5_2_18: true
 ubuntu1804cis_rule_5_2_19: true
 ubuntu1804cis_rule_5_2_20: true
-ubuntu1804cis_rule_5_2_21: true
+#ubuntu1804cis_rule_5_2_21: true
 ubuntu1804cis_rule_5_2_22: true
 ubuntu1804cis_rule_5_2_23: true
 ubuntu1804cis_rule_5_3_1: true
@@ -250,7 +250,7 @@ ubuntu1804cis_rule_5_4_3: true
 ubuntu1804cis_rule_5_4_4: true
 ubuntu1804cis_rule_5_4_5: true
 ubuntu1804cis_rule_5_5: true
-ubuntu1804cis_rule_5_6: false
+ubuntu1804cis_rule_5_6: true
 
 # Section 6 rules
 ubuntu1804cis_rule_6_1_1: true
